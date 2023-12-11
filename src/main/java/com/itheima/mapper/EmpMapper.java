@@ -1,6 +1,7 @@
 package com.itheima.mapper;
 
 import com.itheima.pojo.Emp;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,6 +31,15 @@ public interface EmpMapper {
 
     public List<Emp> list(@Param("name") String name, @Param("gender") Short gender,
                           @Param("begin") LocalDate begin, @Param("end") LocalDate end);
-                        //踩坑，parameter 'xxx' not found
-                        //解决办法：在mapper（dao）中,使用@param指定传参
+                            //踩坑，parameter 'xxx' not found
+                            //解决办法：在mapper（dao）中,使用@param指定传参
+
+
+    void delete(@Param("ids") List<Integer> ids);
+
+
+    @Insert("insert into emp(username, name, gender, image, job, entrydate, dept_id, create_time, update_time) " +
+            "values(#{username},#{name},#{gender},#{image},#{job},#{entrydate},#{deptId},#{createTime},#{updateTime}) ")
+    void insert(Emp emp);
+
 }
