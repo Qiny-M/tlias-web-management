@@ -9,6 +9,7 @@ import com.itheima.service.EmpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -23,7 +24,8 @@ public class EmpServiceImpl implements EmpService {
     private EmpMapper empMapper;
 
     @Override
-    public PageBean page(Integer page, Integer pageSize) {
+    public PageBean page(Integer page, Integer pageSize,
+                         String name, Short gender, LocalDate begin, LocalDate end) {
         //1.获取总记录数
         //Long count = empMapper.count();
 
@@ -40,7 +42,7 @@ public class EmpServiceImpl implements EmpService {
         PageHelper.startPage(page, pageSize);
 
         //2.执行查询
-        List<Emp> empList = empMapper.list();
+        List<Emp> empList = empMapper.list(name, gender, begin, end);
         Page<Emp> p = (Page<Emp>)empList;
 
         //3.封装成pageBean对象

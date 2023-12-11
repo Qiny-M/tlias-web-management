@@ -2,8 +2,9 @@ package com.itheima.mapper;
 
 import com.itheima.pojo.Emp;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -24,6 +25,11 @@ public interface EmpMapper {
 
     //使用pageHelper插件完成分页查询
     //员工数据查询
-    @Select("select * from emp")
-    public List<Emp> list();
+    //@Select("select * from emp")
+
+
+    public List<Emp> list(@Param("name") String name, @Param("gender") Short gender,
+                          @Param("begin") LocalDate begin, @Param("end") LocalDate end);
+                        //踩坑，parameter 'xxx' not found
+                        //解决办法：在mapper（dao）中,使用@param指定传参
 }
