@@ -45,20 +45,40 @@ public class EmpController {
      *批量删除员工数据
      * */
     @DeleteMapping("/{ids}")
-    public Result delete(@PathVariable List<Integer> ids){
+    public Result delete(@PathVariable List<Integer> ids) {
 
-        log.info("批量删除员工数据，ids:{}",ids);
+        log.info("批量删除员工数据，ids:{}", ids);
         empService.delete(ids);
         return Result.success();
     }
 
     /*
-    * 新增员工
-    * */
+     * 新增员工
+     * */
     @PostMapping
-    public Result save(@RequestBody Emp emp){
-        log.info("新增员工，emp:{}",emp);
+    public Result save(@RequestBody Emp emp) {
+        log.info("新增员工，emp:{}", emp);
         empService.save(emp);
         return Result.success();
     }
+
+    /*
+     * 编辑员工-查询回显-根据id查询
+     * */
+    @GetMapping("/{id}")
+    public Result getById(@PathVariable Integer id) {
+        log.info("根据id查询员工：{}", id);
+        Emp emp = empService.getById(id);
+        return Result.success(emp);
+    }
+
+    /*
+     * 修改员工-根据id*/
+    @PutMapping
+    public Result update(@RequestBody Emp emp) {
+        log.info("修改员工信息：{}", emp);
+        empService.update(emp);
+        return Result.success();
+    }
+
 }

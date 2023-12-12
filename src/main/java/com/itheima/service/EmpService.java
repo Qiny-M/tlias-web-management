@@ -23,4 +23,13 @@ public interface EmpService {
 
     /*新增员工*/
     void save(Emp emp);
+
+    /*根据id员工*/
+    Emp getById(Integer id);
+
+    /*根据id修改员工*/
+    void update(Emp emp);
+
+    /*员工登陆*/
+    Emp login(Emp emp);
 }
