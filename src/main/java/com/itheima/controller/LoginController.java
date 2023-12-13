@@ -27,6 +27,12 @@ public class LoginController {
     @Autowired
     private EmpService empService;
 
+    /**
+     * @description defaultDescription
+     * @param emp
+     * defaultParamDescription
+     * @return Result
+     * @author meng*/
     @PostMapping
     public Result login(@RequestBody Emp emp) {
         log.info("员工登陆：{}", emp);

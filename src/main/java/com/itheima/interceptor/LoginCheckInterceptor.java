@@ -1,34 +1,27 @@
-package com.itheima.filter;
+package com.itheima.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.itheima.pojo.Result;
 import com.itheima.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * @author mqy
  * @version 1.0
- * @date 2023/12/12 21:35
+ * @date 2023/12/13 10:07
  */
 @Slf4j
-//@WebFilter(urlPatterns = "/*")
-public class LoginCheckFilter implements Filter {
-
-//    @Override//初始化的方法，只会被调用一次
-//    public void init(FilterConfig filterConfig) throws ServletException {
-//        System.out.println("初始化了");
-//    }
-
-    @Override//拦截到请求后调用，调用多次
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse resp = (HttpServletResponse) response;
+@Component
+public class LoginCheckInterceptor implements HandlerInterceptor {
+    @Override//目标资源方法运行前运行，true:放行
+    public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
 
         //1.获取请求的url
         String url = req.getRequestURL().toString();
@@ -37,8 +30,7 @@ public class LoginCheckFilter implements Filter {
         //2.判断请求url中是否包含login，如果包含，说明是登陆操作，就放行
         if (url.contains("login")) {
             log.info("登陆操作，放行");
-            chain.doFilter(request, response);
-            return;
+            return true;
         }
 
         //3.获取请求头中的令牌（token）
@@ -52,7 +44,7 @@ public class LoginCheckFilter implements Filter {
             //手动转换 对象-->json -------alibaba jsonFAST
             String notLoginResult = JSONObject.toJSONString(error);
             resp.getWriter().write(notLoginResult);
-            return;
+            return false;
         }
 
         //5.解析token，如果解析失败，也返回错误结果（未登陆）
@@ -65,17 +57,25 @@ public class LoginCheckFilter implements Filter {
             //手动转换 对象-->json -------alibaba jsonFAST
             String notLoginResult = JSONObject.toJSONString(error);
             resp.getWriter().write(notLoginResult);
-            return;
+            return false;
         }
 
         //6.放行
         log.info("令牌合法，放行");
-        chain.doFilter(request, response);
+        return true;
+
 
     }
 
-//    @Override//销毁方法，只会被调用一次
-//    public void destroy() {
-//        System.out.println("销毁了");
-//    }
+    //目标资源方法运行后运行
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        System.out.println("postHandler");
+    }
+
+    //视图渲染完毕后运行，最后运行
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        System.out.println("afterHandler");
+    }
 }

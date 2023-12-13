@@ -1,10 +1,7 @@
 package com.itheima.mapper;
 
 import com.itheima.pojo.Emp;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,6 +13,14 @@ import java.util.List;
  */
 @Mapper
 public interface EmpMapper {
+
+    /**
+     *  根据部门id删除该部门下的员工
+     * @param deptId
+     *
+     * @author meng*/
+    @Delete("delete from emp where dept_id = #{deptId}")
+    void deleteById(Integer deptId);
 
 //    /*查询总记录数*/
 //    @Select("select count(*) from emp ")
